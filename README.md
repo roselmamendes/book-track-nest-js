@@ -3,6 +3,9 @@
 ```bash
 $ yarn install
 ```
+## Integracción con Notion
+
+Para obtener el token, haga clic [aquí](https://www.notion.so/my-integrations)
 
 ## Compile and run the project
 

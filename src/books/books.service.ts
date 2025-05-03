@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { getNotionBookshelfDatabase } from '../clients/notion'
-import { ConfigService } from '@nestjs/config';
-import { buildBooksListFromNotion , Book} from './books';
+import { buildBooksListFromNotion, Book } from './books';
+import { NotionClient } from '../clients/notion';
 
 @Injectable()
 export class BooksService {
   
-constructor(private configService: ConfigService) {}
+constructor(
+  private notionClient: NotionClient,
+) {}
 
   books: any[] = [
       {
@@ -26,11 +27,8 @@ constructor(private configService: ConfigService) {}
   }
 
   async findAllFromNotion(): Promise<Book[]>{
-    const notionPageId = this.configService.get<string>('NOTION_PAGE_ID');
-    const notionKey = this.configService.get<string>('NOTION_KEY');
-    
-    let notionBookshelfDatabase = await getNotionBookshelfDatabase(notionKey, notionPageId);
-    let resultToShow = buildBooksListFromNotion(notionBookshelfDatabase.results);
+    const notionBookshelfDatabase = await this.notionClient.getNotionBookshelfDatabase();
+    const resultToShow = buildBooksListFromNotion(notionBookshelfDatabase.results);
     return resultToShow;
   }
 }

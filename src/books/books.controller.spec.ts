@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
 import { ConfigService } from '@nestjs/config';
+import { NotionClient } from '../clients/notion';
 
 describe('BooksController', () => {
   let booksController: BooksController;
@@ -10,7 +11,14 @@ describe('BooksController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [BooksController],
-      providers: [BooksService,
+      providers: [
+        {
+          provide: NotionClient,
+          useValue: {
+            getNotionBookshelfDatabase: jest.fn()
+        }
+        },
+        BooksService,
         {
           provide: ConfigService,
           useValue: {
